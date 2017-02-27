@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title> 
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    </head>
+    <body>
+        
+        <h1>Shopping Cart</h1>
+        
+        
+        
+ <div>  
+    <ul>
+        <li><a class= "add-to-cart" href ="#" data-name="Apple" data-price"1.25">Apple $1.25</a></li>
+        <li><a class= "add-to-cart" href ="#" data-name="cherries" data-price"2.50">cherries $2.50</a></li>
+        <li><a class= "add-to-cart" href ="#" data-name="banana" data-price"3.25">Banana $3.25</a></li>
+        <li><a class= "add-to-cart" href ="#" data-name="hotdogs" data-price"1.25">Banana $1.25</a></li>     
+     </ul>
+     
+      <button id="clear-cart">Clear Cart</button?>
+</div>
+        
+        
+<div> 
+    <ul id= "show-cart">
+   
+    </ul>        
+</div>        
+        
+        
+        <script>
+            
+            $(".add-to-cart").click(function(event){
+                event.preventDefault();
+                var name = $(this).attr("data-name");
+                var price = Number($(this).attr("data-price"));
+                
+                addItemCart(name, price,1);
+                displayCart();
+            });
+            
+            
+            function displayCart () {
+                var cartArray = listCart();
+                var output = " ";
+                for(var i in cartArray) {
+                    output += "<li>"+cartArray[i].name+" "+cartArray[i].qty+"</li>"
+                    
+                }
+                $("#show-cart").html(output);
+            }
+            
+            
+            
+            
+            
+            
+            
+            
+          //  <!-------------------------------------- Shopping cart Functions //
+            
+        
+            
+    
+            
+            var cart = [];  // setup a array to hold purchased items this is a empty shoppinhg cart
+            
+            // made a function so i can load items for sale
+            var Item = function(name, price, qty) {
+                this.name = name;
+                this.price = price;
+                this.qty = qty;
+      
+            };
+            
+            //THESE ARE MY FUNCTIONS
+            
+            //NEW FUNCTION**********
+            //addItemCart(name, price, qty)
+            function addItemCart (name, price, qty){
+                
+                // add some validation to match names in function 
+                for( var i in cart) {               //this loops thru items in cart 
+                    if(cart[0].name === name) {
+                        cart[i].qty += qty;  // this adds qty of sep items in cart ie; you went back and got another apple  
+                        return;
+                    }
+                }//ends for loop to check 
+                
+                var item = new Item(name,price,qty);
+                cart.push(item);
+                saveCart();
+            } //ENDS addItemCart function 
+            
+           
+            
+            
+
+            //****NEW FUNCTION*****
+            //removeItemCart(name) // this just removes one item
+            function removeItemCart(name) {
+                for(var i in cart) {
+                    if(cart[i].name === name) {   
+                        cart[i].qty --; 
+                            if(cart[i].qty === 0){
+                                cart.splice(i,1);  // found SPLICE trying to figure how to get rid of item if qty <0
+                            }
+                                                    
+                        break;   
+                    }
+                }
+                saveCart();
+                
+        } // ends removeItemCart function *****
+            
+          
+            /* TESTING THE removeItemCart
+            
+             addItemCart("apple",1.44,1);
+            addItemCart("pizza",6.99,2); 
+            addItemCart("apple",1.44,1);
+            addItemCart("apple",1.44,1);
+            addItemCart("apple",1.44,1);
+            addItemCart("apple",1.44,1);
+            
+            console.log(cart[0].qty);
+            removeItemCart("apple");
+            removeItemCart("apple");
+            removeItemCart("apple");
+            removeItemCart("apple");
+            removeItemCart("apple");
+            removeItemCart("apple");
+            removeItemCart("apple");
+            removeItemCart("apple");
+            console.log(cart);
+            */
+            
+            
+         
+            //NEW FUNCtion *****************
+           
+            //removeItemAllCart(name) // this removes qty of item of same name ie all the apples
+            function removeALLItem(name){
+                for (var i in cart){
+                    if (cart[i].name === name){
+                        cart.splice(i,1);
+                        break;    
+                        
+                    }
+                }
+                saveCart();
+            } //ends removeItemAllCart
+            
+            
+            // Testing remove ALL function ****
+         //   addItemCart("apple",1.44,1);
+         //   addItemCart("pizza",6.99,2); 
+          //  addItemCart("apple",1.44,1);
+         //   addItemCart("apple",1.44,1);
+          //  addItemCart("apple",1.44,1);
+         //   addItemCart("apple",1.44,1);
+         //   addItemCart("hotdogs",3.00,1);
+         //   addItemCart("books",15.99,5);
+            
+       // console.log(cart.length);
+         //   console.log(cart);
+       
+         //   removeALLItem("pizza");
+          //  console.log(cart.length);
+         //   console.log(cart);
+            
+            
+            
+            
+            
+            //NEW FUNCtion *************
+            //emptyCart()
+            function emptyCart() {
+                cart = []; //sets cart to empty 
+                saveCart();
+            }//ends emptyCart
+            
+            
+            
+            
+            //TEST EMPTYCART 
+           /* addItemCart("apple",1.44,1);
+            addItemCart("pizza",6.99,2); 
+            addItemCart("apple",1.44,1);
+            addItemCart("apple",1.44,1);
+            addItemCart("apple",1.44,1);
+            addItemCart("apple",1.44,1);
+            addItemCart("hotdogs",3.00,1);
+            addItemCart("books",15.99,5);
+            
+            console.log(cart);
+            emptyCart();
+            console.log(cart);
+            */
+            
+            
+            
+            
+            // NEW FUNCTION 
+            //counts Items in Cart(); //returns the total qty
+            function countItem() {
+                var total = 0;
+                for (var i in cart) {
+                    total += cart[i].qty; 
+                }
+                return total;
+            } //ends countItem function
+                
+                 //TEST countItem 
+          /*  addItemCart("apple",1.44,1);
+            addItemCart("pizza",6.99,2); 
+            addItemCart("apple",1.44,1);
+            addItemCart("apple",1.44,1);
+            addItemCart("apple",1.44,1);
+            addItemCart("apple",1.44,1);
+            addItemCart("hotdogs",3.00,1);
+            addItemCart("books",15.99,5);
+            
+            console.log(cart);
+          console.log(countItem());
+            console.log(cart);  */
+            
+                
+            
+            
+            
+            
+            
+            //NEW FUNCTION
+            //totalCart() total cost of items of cart
+            function totalCart() {
+                var ticketTotal = 0;
+                for (var i in cart) {
+                    ticketTotal += cart[i].price;     
+                }
+                return ticketTotal;
+            }//ends totalCart************
+            
+            // TESTING totalCart
+           /* addItemCart("pizza",6.99,2); 
+            addItemCart("apple",1.44,1);
+            addItemCart("apple",1.44,1);
+            addItemCart("apple",1.44,1);
+            addItemCart("apple",1.44,1);
+            addItemCart("hotdogs",3.00,1);
+            addItemCart("books",15.99,5);
+            
+            console.log(totalCart() );   // i dont understand the inner () 
+            */
+            
+            
+            
+            // NEW FUNCTION *******
+            //showCart()  // this item shows a array of the items in the cart
+            function showCart() {  // array of items   
+                      var cartCopy = [];
+                        for(var i in cart) {
+                            var item = cart[i];
+                            var itemCopy = {}; // make a js object that is a copy of orig cart item
+                            for (var j in item) {
+                                itemCopy[j] = item[j];  
+                            }
+                            cartCopy.push(itemCopy);
+                        }
+                return cartCopy;
+                  
+            }// ends showCart function 
+            
+            // TEST FOR showCart
+           // addItemCart("hotwings",4.00,1);
+         // console.log(showCart());
+            
+            //end TEST for showcart*********
+     
+        
+            
+          
+            //NEW FUNCTION *********** 
+            // saveCart()  // if user leaves page saves their cart on their return to site
+            function saveCart() {
+                localStorage.setItem("Cart",JSON.stringify(cart)); //stores files on local drives // first time using
+                //JSON 
+            }
+            
+            
+            // TESTING saveCart function*******
+          //   addItemCart("hamburger",45.99,4);
+            
+            
+            // NEW FUNCTION
+            // loadCart() // reloads cart on user return to site if user saved cart
+            function loadCart(){
+               cart = JSON.parse ( localStorage.getItem("Cart") );  // from a JSON object
+                
+            }//ends loadcart fucntion 
+            
+           
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+    
+    
+        </script>
+    </body>
+</html>
